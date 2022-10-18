@@ -4,21 +4,21 @@ library("datasets")
 library("dplyr")
 library("tidyverse")
 
-data_full <- read.csv("household_power_consumption.txt", header = T, sep = ';', 
+df <- read.csv("household_power_consumption.txt", header = T, sep = ';', 
                       na.strings = "?", nrows = 2075259, check.names = F, 
                       stringsAsFactors = F, comment.char = "", quote = '\"')
-data_full$Date <- as.Date(data_full$Date, format = "%d/%m/%Y")
+df$Date <- as.Date(df$Date, format = "%d/%m/%Y")
 
-data <- subset(data_full, subset = (Date >= "2007-02-01" & Date <= "2007-02-02"))
-rm(data_full)
+energy <- subset(df, subset = (Date >= "2007-02-01" & Date <= "2007-02-02"))
+rm(df)
 
-datetime <- paste(as.Date(data$Date), data$Time)
-data$Datetime <- as.POSIXct(datetime)
+datetime <- paste(as.Date(energy$Date), energy$Time)
+energy$Datetime <- as.POSIXct(datetime)
 
 
 png("plot2.png", width = 480,  height = 480)
 
-plot(data$Global_active_power ~ data$Datetime, type = "l",
+plot(energy$Global_active_power ~ energy$Datetime, type = "l",
      ylab = "Global Active Power (kilowatts)", xlab = "")
 
 dev.off()
